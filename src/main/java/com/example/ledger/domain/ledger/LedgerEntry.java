@@ -16,7 +16,7 @@ public class LedgerEntry {
     @Column(name="account_id",nullable = false)
     private Long accountId;
 
-    @Column(nullable = false,precision = 19,scale = 4)
+    @Column(nullable = false,precision = 19,scale = 2)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
