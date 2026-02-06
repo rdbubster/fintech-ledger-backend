@@ -1,5 +1,6 @@
 package com.example.ledger.domain.ledger;
 
+import com.example.ledger.domain.account.Account;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,8 +14,9 @@ public class LedgerEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="account_id",nullable = false)
-    private Long accountId;
+    @ManyToOne(fetch=FetchType.LAZY,optional = false)
+    @JoinColumn(name="account_id",nullable = false)
+    private Account account;
 
     @Column(nullable = false,precision = 19,scale = 2)
     private BigDecimal amount;
@@ -32,11 +34,11 @@ public class LedgerEntry {
     protected LedgerEntry(){}
 
     public LedgerEntry(
-            Long accountId,
+            Account account,
             BigDecimal amount,
             LedgerEntryType type,
             String referenceId){
-        this.accountId=accountId;
+        this.account=account;
         this.amount=amount;
         this.type=type;
         this.referenceId=referenceId;
@@ -47,8 +49,8 @@ public class LedgerEntry {
         return id;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Account getAccountId() {
+        return account;
     }
 
     public BigDecimal getAmount() {
