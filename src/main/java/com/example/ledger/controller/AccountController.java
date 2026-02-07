@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
@@ -52,6 +54,14 @@ public class AccountController {
         ledgerService.credit(id,request.getAmount(),request.getReferenceId()
         );
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<BigDecimal> getAccountBalance(
+            @PathVariable Long id
+    ){
+        BigDecimal balance=accountService.getBalance(id);
+        return ResponseEntity.ok(balance);
     }
 }
 

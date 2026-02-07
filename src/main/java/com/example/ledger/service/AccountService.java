@@ -2,15 +2,20 @@ package com.example.ledger.service;
 import com.example.ledger.domain.account.Account;
 import com.example.ledger.dto.AccountResponse;
 import com.example.ledger.repository.AccountRepository;
+import com.example.ledger.repository.LedgerEntryRepository;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final LedgerEntryRepository ledgerEntryRepository;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository,LedgerEntryRepository ledgerEntryRepository) {
         this.accountRepository = accountRepository;
+        this.ledgerEntryRepository=ledgerEntryRepository;
     }
 
     public AccountResponse createAccount(String name) {
@@ -36,7 +41,16 @@ public class AccountService {
                 account.getId(),
                 account.getName(),
                 account.getCreatedAt()
-        );
-    }
+        );}
+
+        public BigDecimal getBalance(Long accountId) {
+
+            if (!accountRepository.existsById(accountId)) {
+                throw new IllegalArgumentException("Account not found");
+            }
+            return ledgerEntryRepository.calculateBalance(accountId);
+
+
+        }
 }
 
