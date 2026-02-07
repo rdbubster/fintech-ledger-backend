@@ -34,5 +34,33 @@ public class LedgerService {
 
         ledgerEntryRepository.save(entry);
     }
+    @Transactional
+    public void debit(Long accountId,BigDecimal amount, String referenceId){
+        if(amount==null || amount.compareTo(BigDecimal.ZERO)<=0){
+            throw new IllegalArgumentException("Debit amount must be greater than zero");
+        }
+        // here we locked the account row
+
+        Account account=accountRepository.findById(accountId).orElseThrow(()-> new IllegalArgumentException("Account not found"));
+
+
+        // here we calculate the balance
+
+        BigDecimal balance= ledgerEntryRepository.calculateBalance(accountId);
+
+
+        // check the invarient
+
+        if(balance.compareTo(amount)<0){
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+
+        // Here we insert DEBIT ledger entry
+
+        LedgerEntry entry =new LedgerEntry(
+                account,amount,LedgerEntryType.DEBIT,referenceId
+        );
+        ledgerEntryRepository.save(entry);
+    }
 
 }

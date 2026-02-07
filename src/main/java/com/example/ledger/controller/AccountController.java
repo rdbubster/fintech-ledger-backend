@@ -3,6 +3,7 @@ package com.example.ledger.controller;
 import com.example.ledger.dto.AccountResponse;
 import com.example.ledger.dto.CreateAccountRequest;
 import com.example.ledger.dto.CreditRequest;
+import com.example.ledger.dto.DebitRequest;
 import com.example.ledger.service.AccountService;
 import com.example.ledger.service.LedgerService;
 import org.springframework.http.HttpStatus;
@@ -63,5 +64,13 @@ public class AccountController {
         BigDecimal balance=accountService.getBalance(id);
         return ResponseEntity.ok(balance);
     }
+
+    @PostMapping("/{id}/debit")
+    public ResponseEntity<Void> debitAccount(
+            @PathVariable Long id,@RequestBody DebitRequest request){
+        ledgerService.debit(id,request.getAmount(),request.getReferenceId());
+        return ResponseEntity.noContent().build();
+    }
+
 }
 
