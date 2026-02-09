@@ -49,13 +49,21 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/credit")
-    public ResponseEntity<Void> creditAccount(
+    public ResponseEntity<?> creditAccount(
             @PathVariable Long id,@RequestBody CreditRequest request
-    ){
-        ledgerService.credit(id,request.getAmount(),request.getReferenceId()
-        );
-        return ResponseEntity.noContent().build();
+    ) {
+        try {
+            ledgerService.credit(id, request.getAmount(), request.getReferenceId()
+            );
+            return ResponseEntity.noContent().build();
+        }
+// here it is the updated one of credit part( we included ? and we had try and catch block. catch ke baad se it has been updated
+
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
 
     @GetMapping("/{id}/balance")
     public ResponseEntity<BigDecimal> getAccountBalance(
@@ -66,11 +74,16 @@ public class AccountController {
     }
 
     @PostMapping("/{id}/debit")
-    public ResponseEntity<Void> debitAccount(
-            @PathVariable Long id,@RequestBody DebitRequest request){
-        ledgerService.debit(id,request.getAmount(),request.getReferenceId());
-        return ResponseEntity.noContent().build();
-    }
+    public ResponseEntity<?> debitAccount(
+            @PathVariable Long id,@RequestBody DebitRequest request) {
 
+        try {
+            ledgerService.debit(id, request.getAmount(), request.getReferenceId());
+            return ResponseEntity.noContent().build();
+        }
+        catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
 

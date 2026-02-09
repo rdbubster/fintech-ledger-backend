@@ -49,7 +49,7 @@ public class LedgerService {
         BigDecimal balance= ledgerEntryRepository.calculateBalance(accountId);
 
 
-        // check the invarient
+        // check the invariant
 
         if(balance.compareTo(amount)<0){
             throw new IllegalArgumentException("Insufficient balance");
