@@ -20,4 +20,6 @@ FROM LedgerEntry le
 WHERE le.account.id= :accountId
 """)
     BigDecimal calculateBalance(@Param("accountId") Long accountId);
+
+    boolean existsByAccount_IdAndReferenceId(Long accountId, String referenceId);
 }

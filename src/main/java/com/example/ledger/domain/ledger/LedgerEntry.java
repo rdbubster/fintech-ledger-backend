@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name="ledger_entries")
+@Table(name="ledger_entries",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"account_id","reference_id"})
+})
 public class LedgerEntry {
 
     @Id
