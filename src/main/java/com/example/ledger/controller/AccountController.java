@@ -73,6 +73,7 @@ public class AccountController {
         return ResponseEntity.ok(balance);
     }
 
+
     @PostMapping("/{id}/debit")
     public ResponseEntity<?> debitAccount(
             @PathVariable Long id,@RequestBody DebitRequest request) {

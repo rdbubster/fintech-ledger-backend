@@ -37,7 +37,7 @@ public class LedgerService {
         }
 
         // 2️. Lock account
-        Account account = (Account) accountRepository
+        Account account = accountRepository
                 .findByIdForUpdate(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId));
 
@@ -92,5 +92,6 @@ public class LedgerService {
             throw new InvalidAmountException(amount);
         }
     }
+
 }
 
