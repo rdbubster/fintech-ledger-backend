@@ -1,16 +1,17 @@
 package com.example.ledger.controller;
 
-import com.example.ledger.dto.AccountResponse;
-import com.example.ledger.dto.CreateAccountRequest;
-import com.example.ledger.dto.CreditRequest;
-import com.example.ledger.dto.DebitRequest;
+import com.example.ledger.dto.*;
 import com.example.ledger.service.AccountService;
 import com.example.ledger.service.LedgerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
+
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.example.ledger.dto.TransactionResponse;
+
 
 @RestController
 @RequestMapping("/accounts")
@@ -85,6 +86,15 @@ public class AccountController {
         catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{id}/transactions")
+    public Page<TransactionResponse> getTransactions(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return ledgerService.getTransactions(id, page, size);
     }
 }
 
