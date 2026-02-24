@@ -1,7 +1,9 @@
 package com.example.ledger.dto;
 
+import jakarta.validation.constraints.NotBlank;
 public class CreateAccountRequest {
 
+    @NotBlank(message = "Account name must not be blank")
     private String name;
 
     public CreateAccountRequest(){}

@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
+import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.ledger.dto.TransactionResponse;
+import jakarta.validation.constraints.Min;
 
 
 @RestController
@@ -28,7 +30,7 @@ public class AccountController {
     // POST /accounts
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(
-            @RequestBody CreateAccountRequest request
+           @Valid @RequestBody CreateAccountRequest request
     ) {
         AccountResponse response =
                 accountService.createAccount(request.getName());
@@ -51,7 +53,7 @@ public class AccountController {
 
     @PostMapping("/{id}/credit")
     public ResponseEntity<?> creditAccount(
-            @PathVariable Long id,@RequestBody CreditRequest request
+            @PathVariable Long id,@Valid@RequestBody CreditRequest request
     ) {
         try {
             ledgerService.credit(id, request.getAmount(), request.getReferenceId()
@@ -77,7 +79,7 @@ public class AccountController {
 
     @PostMapping("/{id}/debit")
     public ResponseEntity<?> debitAccount(
-            @PathVariable Long id,@RequestBody DebitRequest request) {
+            @PathVariable Long id,@Valid@RequestBody DebitRequest request) {
 
         try {
             ledgerService.debit(id, request.getAmount(), request.getReferenceId());
@@ -94,7 +96,10 @@ public class AccountController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
+        int maxSize=50;
+        size=Math.min(size,maxSize);
         return ledgerService.getTransactions(id, page, size);
     }
+
 }
 
