@@ -9,17 +9,24 @@ import com.example.ledger.exception.InsufficientBalanceException;
 import com.example.ledger.exception.InvalidAmountException;
 import com.example.ledger.repository.AccountRepository;
 import com.example.ledger.repository.LedgerEntryRepository;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
+import org.jboss.logging.BasicLogger;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 
 @Service
 public class LedgerService {
+
+    private static final Logger log = LoggerFactory.getLogger(LedgerService.class);
 
     private final AccountRepository accountRepository;
     private final LedgerEntryRepository ledgerEntryRepository;
@@ -54,7 +61,9 @@ public class LedgerService {
                 referenceId
         );
 
-        ledgerEntryRepository.save(entry);
+
+            ledgerEntryRepository.save(entry);
+
     }
 
     @Transactional
